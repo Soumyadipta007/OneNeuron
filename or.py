@@ -6,7 +6,7 @@ import os
 
 
 logging_str="[%(asctime)s: %(levelname)s: %(module)s:] %(message)s"
-logging.basicConfig(level=logging.INFO, format=logging_str)
+logging.basicConfig(level=logging.INFO, format=logging_str, filemode="a")
 
 log_dir="logs"
 os.makedirs(log_dir,exist_ok=True)
@@ -43,7 +43,7 @@ if __name__ == "__main__":
     try:
         logging.info(">>> starting the training")
         main(data=OR,eta=ETA,epochs=EPOCHS,filename= filename, plotFilename=plotFilename)
-        logging.info(">>> stopped the training")
+        logging.info(">>> stopped the training\n\n\n")
     except Exception as e:
         logging.exception(e)
-        raise  e
+        raise  e # to also print the exception on terminal
