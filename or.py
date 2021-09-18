@@ -1,10 +1,23 @@
 from utils.model import Perceptron
 from utils.all_utils import prepare_data,save_model,save_plot
 import pandas as pd
+import  logging
+import os
+
+
+logging_str="[%(asctime)s: %(levelname)s: %(module)s:] %(message)s"
+logging.basicConfig(level=logging.INFO, format=logging_str)
+
+log_dir="logs"
+os.makedirs(log_dir,exist_ok=True)
+# Remove all handlers associated with the root logger object.
+for handler in logging.root.handlers[:]:
+    logging.root.removeHandler(handler)
+logging.basicConfig(filename=os.path.join(log_dir,"current_logs.log"),level=logging.INFO,format=logging_str)
 
 def main(data,eta,epochs,filename,plotFilename):
     df = pd.DataFrame(data)
-    print(df)
+    logging.info(f"This is a dataframe{df}")
 
     X,y = prepare_data(df)
 
@@ -27,4 +40,10 @@ if __name__ == "__main__":
     EPOCHS = 10
     filename="or.model"
     plotFilename="or.png"
-    main(data=OR,eta=ETA,epochs=EPOCHS,filename= filename, plotFilename=plotFilename)
+    try:
+        logging.info(">>> starting the training")
+        main(data=OR,eta=ETA,epochs=EPOCHS,filename= filename, plotFilename=plotFilename)
+        logging.info(">>> stopped the training")
+    except Exception as e:
+        logging.exception(e)
+        raise  e
